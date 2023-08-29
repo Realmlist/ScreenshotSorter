@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:ScreenshotSorter"
+             x:Class="ScreenshotSorter.MainPage">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!--Row 1 : Header-->
+        <Grid Background="#FF252525">
+            <Label VerticalTextAlignment="Center" 
+                   Padding="10,5"
+                   FontSize="Header"
+                   Text="ScreenshotSorter" />
+        </Grid>
+
+        <!-- Content -->
+        
+            <VerticalStackLayout Grid.Row="1"
+                Spacing="25"
+                Padding="30"
+                VerticalOptions="Start">
+
+                <Frame CornerRadius="5"
+                       Padding="10">
+                    <StackLayout>
+                        <Label Text="Folders"
+                               FontSize="Large"
+                               FontAttributes="Bold" />
+                        <BoxView HeightRequest="2"
+                                 HorizontalOptions="Fill" />
+
+                        <HorizontalStackLayout HorizontalOptions="Center"
+                                               Padding="0,20,0,20" 
+                                               Spacing="10">
+
+                            <Entry x:Name="entScreenshotsFolder"
+                                   Placeholder="Screenshots folder"
+                                   MinimumWidthRequest="500"
+                                   IsReadOnly="True"/>
+                            <Button x:Name="btnScreenshotBrowse"
+                                    Text="Browse..."
+                                    Clicked="OnSCBrowseClicked" />
+                        </HorizontalStackLayout>
+
+                        <StackLayout Orientation="Horizontal"
+                                     Padding="45,0,0,0"
+                                     Spacing="-10">
+                            <CheckBox x:Name="chbMove"
+                                      CheckedChanged="MoveIsChecked"/>
+
+                            <Label VerticalTextAlignment="Center" 
+                                   x:Name="lblMove"
+                                   Text="Move screenshots to a different folder">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="LblMoveClicked"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+
+                        <HorizontalStackLayout HorizontalOptions="Center"
+                                               Padding="0,0,0,20"
+                                               Spacing="10"
+                                               x:Name="layMoveFolder">
+
+                            <Entry x:Name="entScreenshotsMoveFolder"
+                                   Placeholder="Target folder"
+                                   MinimumWidthRequest="500"
+                                   IsReadOnly="True"
+                                   IsEnabled="False"/>
+
+                            <Button x:Name="btnScreenshotMoveBrowse"
+                                    Text="Browse..."
+                                    Clicked="OnSCMoveBrowseClicked"
+                                    IsEnabled="False"/>
+                            
+                        </HorizontalStackLayout>
+
+
+                    </StackLayout>
+
+                </Frame>
+
+                <Frame CornerRadius="5"
+                       Padding="10">
+                    <StackLayout>
+                        <Label Text="Sorting and Date Notation"
+                               FontSize="Large"
+                               FontAttributes="Bold" />
+                        <BoxView HeightRequest="2"
+                                 HorizontalOptions="Fill" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                               Padding="0,20,0,20"
+                                               Spacing="10">
+
+                        <Picker x:Name="pickerMonth"
+                                SelectedIndexChanged="OnPickerSelectedIndexChanged"
+                                Title="Month folder notation">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>01</x:String>
+                                    <x:String>January</x:String>
+                                    <x:String>01 - January</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+
+                        <StackLayout Orientation="Horizontal" Spacing="-10">
+                            <CheckBox x:Name="chbDay"
+                                      CheckedChanged="DayIsChecked"/>
+
+                            <Label VerticalTextAlignment="Center" 
+                                   x:Name="lblDay"
+                                   Text="Create folders per day">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="LblDayClicked"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                        
+                    </HorizontalStackLayout>
+                </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="5"
+                       Padding="10">
+                    <StackLayout>
+                        <Label Text="Cleanup and Conversion"
+                               FontSize="Large"
+                               FontAttributes="Bold" />
+                        <BoxView HeightRequest="2" HorizontalOptions="Fill" />
+
+
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                               Padding="0,20,0,20"
+                                               Spacing="10">
+
+                        <StackLayout Orientation="Horizontal" Spacing="-10">
+                            <CheckBox x:Name="chbCleanEmpty"
+                                      CheckedChanged="CleanEmptyIsChecked"/>
+
+                            <Label VerticalTextAlignment="Center" 
+                                   x:Name="lblCleanEmpty"
+                                   Text="Clean up empty folders">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="LblCleanEmptyClicked"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" Spacing="-10">
+                            <CheckBox x:Name="chbConvertToWebp"
+                                      CheckedChanged="ConvertToWebpIsChecked"/>
+
+                            <Label VerticalTextAlignment="Center" 
+                                   x:Name="lblConvertToWebp"
+                                   Text="Convert screenshots to .webp">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="LblConvertToWebpClicked"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+
+                    </HorizontalStackLayout>
+                </StackLayout>
+                </Frame>
+
+                <Button
+                    VerticalOptions="Center"
+                    x:Name="StartBtn"
+                    Text="Start"
+                    WidthRequest="100"
+                    HorizontalOptions="Center"
+                    Clicked="OnStartClicked"/>
+
+            </VerticalStackLayout>
+        
+        
+        <!-- Footer -->
+        <Grid Grid.Row="2" Background="#FF252525" Padding="5">
+            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <Label VerticalTextAlignment="Center"
+                       TextDecorations="Underline"
+                       Text="ScreenshotSorter">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenURL}"
+                                              CommandParameter="https://github.com/Realmlist/" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label VerticalTextAlignment="Center"
+                       Text=" by Realmlist" />
+            </HorizontalStackLayout>
+        </Grid>
+        
+    </Grid>
+</ContentPage>
