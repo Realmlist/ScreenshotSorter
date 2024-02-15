@@ -152,7 +152,7 @@
 
                         <StackLayout Orientation="Horizontal" Spacing="-10">
                             <CheckBox x:Name="chbConvertToWebp"
-                                      CheckedChanged="ConvertToWebpIsChecked"/>
+                                      CheckedChanged="ConvertToWebpIsChecked" />
 
                             <Label VerticalTextAlignment="Center" 
                                    x:Name="lblConvertToWebp"
@@ -173,9 +173,16 @@
                     Text="Start"
                     WidthRequest="100"
                     HorizontalOptions="Center"
-                    Clicked="OnStartClicked"/>
+                    Clicked="OnStartClicked"
+                 />
+                
+                <ActivityIndicator IsRunning="False"
+                                   VerticalOptions="Center"
+                                   x:Name="activityInd"
+                                   HorizontalOptions="Center"
+                    />
 
-            </VerticalStackLayout>
+        </VerticalStackLayout>
         
         
         <!-- Footer -->

@@ -19,7 +19,6 @@ public partial class MainPage : ContentPage
         btnScreenshotMoveBrowse.IsEnabled = chbMove.IsChecked;
         pickerMonth.SelectedIndex = 2;
         chbCleanEmpty.IsChecked = true;
-        chbConvertToWebp.IsEnabled = false; // NYI
         chbConvertToWebp.IsChecked = false;
         StartBtn.IsEnabled = false;
         
@@ -126,8 +125,16 @@ public partial class MainPage : ContentPage
         var moveToFolder = entScreenshotsMoveFolder.Text;
         bool cleanUp = chbCleanEmpty.IsChecked;
         bool convertToWebp = chbConvertToWebp.IsChecked;
+        
+        StartBtn.IsEnabled = false;
+        StartBtn.IsVisible = false;
+        activityInd.IsRunning = true;
 
         await Functions.Sort(screenShotsFolder, moveFolders, moveToFolder, monthNotation, sortByDay, cleanUp, convertToWebp);
-        
+
+        StartBtn.IsEnabled = true;
+        StartBtn.IsVisible = true;
+        activityInd.IsRunning = false;
+
     }
 }

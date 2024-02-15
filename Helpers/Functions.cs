@@ -2,7 +2,11 @@
 using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Storage;
 using Microsoft.Maui.Controls;
-
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Webp;
+using System.Runtime.CompilerServices;
+using System.Text;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace ScreenshotSorter;
 
@@ -152,6 +156,7 @@ internal class Functions
         {
             try
             {
+
                 Directory.Delete(directory.FullName, false); // Set recursive to true if you want to delete non-empty directories.
             }
             catch (Exception ex)
@@ -166,6 +171,53 @@ internal class Functions
 
     public static async Task ConvertToWebp(string targetFolder)
     {
-        // TODO
+        // Get the files which should be moved, without folders
+        string[] extensions = { ".png", ".jpg", ".jpeg", ".bmp" };
+        var files = new DirectoryInfo(targetFolder)
+            .EnumerateFiles("*.*", SearchOption.AllDirectories)
+            .Where(file => extensions.Contains(file.Extension.ToLower()))
+            .ToList();
+
+        foreach (var file in files)
+        {
+            using var image = await Image.LoadAsync(file.FullName);
+            
+            var outputFile = $"{file.DirectoryName}\\{Path.GetFileNameWithoutExtension(file.FullName)}.webp";
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(outputFile);
+#endif
+
+            while (File.Exists(outputFile))
+            {
+                // Generate 4 random characters
+                string randomChars = GenerateRandomChars(4);
+
+                // Append the random characters to the filename (before the extension)
+                string outputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputFile);
+                string extension = Path.GetExtension(outputFile);
+                outputFile = $"{file.DirectoryName}\\{outputFileNameWithoutExtension}_{randomChars}{extension}";
+            }
+
+            await image.SaveAsWebpAsync(outputFile, new WebpEncoder()
+            {
+                Method = WebpEncodingMethod.BestQuality,
+                NearLossless = true,
+                NearLosslessQuality = 60
+            });
+      
+        }
+
+        static string GenerateRandomChars(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var random = new Random();
+            var randomChars = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+            {
+                randomChars.Append(chars[random.Next(chars.Length)]);
+            }
+            return randomChars.ToString();
+        }
     }
 }
